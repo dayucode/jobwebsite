@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>角色授权</title>
+    <link rel="stylesheet" href="../../../component/pear/css/pear.css" />
+    <style>
+        .layui-tab-title li{
+            min-width: 160px
+        }
+        .layui-input-block {
+            margin-left: 0!important;
+        }
+        .layui-input{
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        .layui-form-select dd{
+            text-align: center;
+        }
+        .select-data{
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="mainBox">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">菜单权限</li>
+                <li>数据权限</li>
+            </ul>
+            <div class="layui-tab-content" style="padding: 0!important;">
+                <div class="layui-tab-item layui-show">
+                    <div class="main-container">
+                        <ul id="role-power" class="dtree" data-id="0"></ul>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    <div class="layui-form-item select-data">
+                        <div class="layui-input-block">
+                            <select name="scope" lay-filter="change" lay-search>
+                                <option value="ALL">全部</option>
+                                <option value="SELF">仅自己</option>
+                                <option value="DEPT">所在部门</option>
+                                <option value="DEPT_CHILD">所在部门及下级部门</option>
+                                <option value="CUSTOM">自定义数据</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="main-container roleDeptDiv" id="role-dept-div">
+                        <ul id="role-dept" class="dtree" data-id="0"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="power-save">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="pear-btn pear-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
+<script src="../../../component/layui/layui.js"></script>
+<script src="../../../component/pear/applicationUtil.js"></script>
+<script src="../../../component/pear/pear.js"></script>
+<script>
+    layui.use(['dtree', 'form', 'jquery','element','restClient'], function () {
+        let dtree = layui.dtree;
+        let form = layui.form;
+        let $ = layui.jquery;
+        var restClient = layui.restClient;
+        const roleId = JSON.parse(decodeURIComponent(getPathParam("roleId")));
+        dtree.render({
+            elem: "#role-power",
+            method: "get",
+            headers: applicationUtil.authorization,
+            url: applicationUtil.URL + '/api/sys/role/getRolePower?roleId='+roleId,
+            dataFormat: "list",
+            checkbar: true,
+            skin: "layui",
+            initLevel: "1",
+            checkbarType: "all",
+            response: {treeId: "powerId", parentId: "parentId", title: "powerName"}
+        });
+        var custom;
+        form.on('select(change)', function(data){
+            if(data.value === 'CUSTOM'){
+                custom = true;
+                $("#role-dept-div").show();
+                window.getDeptData();
+            }else{
+                custom = false;
+                $("#role-dept-div").hide();
+            }
+        });
+        form.on('submit(power-save)', function (data) {
+            data.field.roleId = roleId;
+            let power_param = dtree.getCheckbarNodesParam("role-power");
+            let power_ids = '';
+            for (let i = 0; i < power_param.length; i++) {
+                let id = power_param[i].nodeId;
+                power_ids += id + ',';
+            }
+            power_ids = power_ids.substr(0, power_ids.length - 1);
+            data.field.powerIds = power_ids.split(',');
+
+            let dept_ids = '';
+            if (custom){
+                let dept_param = dtree.getCheckbarNodesParam("role-dept");
+                for (let i = 0; i < dept_param.length; i++) {
+                    let id = dept_param[i].nodeId;
+                    dept_ids += id + ',';
+                }
+                dept_ids = dept_ids.substr(0, dept_ids.length - 1);
+            }
+            data.field.deptIds = dept_ids.split(',');
+            console.log(JSON.stringify(data.field))
+            restClient.post(applicationUtil.URL + '/api/sys/role/give', JSON.stringify(data.field), (res) => {
+                if (res.success) {
+                    layer.msg(res.msg, {icon: 1, time: 1000}, function () {
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+                        parent.layui.table.reload("role-table");
+                    });
+                } else {
+                    layer.msg(res.msg, {icon: 2, time: 1000});
+                }
+            });
+            return false;
+        });
+        window.getDeptData = function (){
+            dtree.render({
+                elem: "#role-dept",
+                method: 'get',
+                headers: applicationUtil.authorization,
+                url: applicationUtil.URL + '/api/sys/role/getRoleDept?roleId='+roleId,
+                dataFormat: "list",
+                checkbar: true,
+                skin: "layui",
+                initLevel: "2",
+                checkbarType: "all",
+                response: {treeId: "deptId", parentId: "parentId", title: "deptName"}
+            });
+        }
+    })
+</script>
+</body>
+</html>

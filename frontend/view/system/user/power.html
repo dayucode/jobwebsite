@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>分配角色</title>
+	<link href="../../../component/pear/css/pear.css" rel="stylesheet" />
+	<style>
+		.layui-table, .layui-table-view {
+			margin: 1px 0;
+		}
+	</style>
+</head>
+<body>
+<table id="role-table" lay-filter="role-table" class="layui-table"></table>
+<div class="bottom">
+	<div class="button-container">
+		<button class="pear-btn pear-btn-primary pear-btn-sm" id="role-update">
+			<i class="layui-icon layui-icon-ok"></i>
+			提交
+		</button>
+		<button type="reset" class="pear-btn pear-btn-sm">
+			<i class="layui-icon layui-icon-refresh"></i>
+			重置
+		</button>
+	</div>
+</div>
+<script src="../../../component/layui/layui.js"></script>
+<script src="../../../component/pear/applicationUtil.js"></script>
+<script src="../../../component/pear/pear.js"></script>
+<script>
+	layui.use(['table','form','jquery','restClient'],function () {
+		let table = layui.table;
+		let $ = layui.jquery;
+		let restClient = layui.restClient;
+		var  userId =  JSON.parse(decodeURIComponent(getPathParam("userId")));
+		let cols = [
+			[
+				{type:'checkbox'},
+				{title: '角色名', field: 'roleName', align:'center'},
+				{title: '描述', field: 'details', align:'center'},
+			]
+		]
+		table =  $.extend(table, {config: {checkName: 'checked'}});
+		table.render({
+			elem: '#role-table',
+			url: applicationUtil.URL+'/api/sys/user/userRole?userId='+userId,
+			cols: cols ,
+			skin: 'line',
+			toolbar: '#toolbar0',
+			headers: applicationUtil.authorization
+		});
+		$("#role-update").click(function(){
+			window.batchUpdate()
+		});
+		window.batchUpdate = function(){
+			var checkData = table.checkStatus('role-table').data
+			if(checkData.length === 0){
+				layer.msg("未选中数据",{icon:3,time:1000});
+				return false;
+			}
+			let ids = new Array();
+			for(let i = 0;i<checkData.length;i++){
+				ids.push(checkData[i].roleId)
+			}
+			const data = {};
+			data.userId = userId;
+			data.roleIds = ids;
+			console.log(data.userId)
+			console.log(data.roleIds)
+			layer.confirm('确定要分配这些角色?', {icon: 3, title:'提示'}, function(index){
+				layer.close(index);
+				let loading = layer.load();
+				restClient.post(applicationUtil.URL + '/api/sys/user/give',JSON.stringify(data), (res) => {
+					layer.close(loading);
+					if (res.success) {
+						layer.msg(res.msg, {icon: 1, time: 1000}, function () {
+							parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+							parent.layui.table.reload("user-table");
+						});
+					} else {
+						layer.msg(res.msg, {icon: 2, time: 1000});
+					}
+				});
+			});
+		}
+		window.refresh = function(){
+			table.reload('role-table');
+		}
+	})
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pearadmin.pro.modules.sys.repository.SysPowerRepository">
+    <select id="selectList" parameterType="SysPower" resultType="SysPower">
+        select * from sys_power
+        <where>
+            <if test="parentId!=null and parentId!=''">
+                and parent_id = #{parentId}
+            </if>
+        </where>
+        order by sort asc
+    </select>
+
+    <!-- 根据 userId 查询权限 enable 可用 type = 2 操作权限 -->
+    <select id="selectPowerByUserId" parameterType="string" resultType="SysPower">
+        select * from sys_power sp
+        left join sys_role_power srp on srp.power_id = sp.power_id
+        left join sys_role sr on sr.role_id = srp.role_id
+        left join sys_user_role sur on sur.role_id = sr.role_id
+        where sur.user_id = #{userId}
+        and sr.enable = 1
+        and sp.enable = 1
+        and sp.power_type = 2
+    </select>
+
+    <select id="selectPowerByRoleId" parameterType="string" resultType="SysPower">
+        select * from sys_power sp
+        left join sys_role_power srp on srp.power_id = sp.power_id
+        where srp.role_id = #{roleId}
+    </select>
+
+    <resultMap id="ResuMenuMap" type="com.pearadmin.pro.modules.sys.domain.SysMenu">
+        <id column="power_id" property="id"></id>
+        <result column="parent_id" property="parentId"></result>
+        <result column="power_name" property="title"></result>
+        <result column="power_type" property="type"></result>
+        <result column="icon" property="icon"></result>
+        <result column="open_type" property="openType"></result>
+        <result column="power_url" property="href"></result>
+        <result column="power_code" property="powerCode"></result>
+    </resultMap>
+
+    <!-- 根据 userId 查询菜单 enable 权限可用 type !=2 菜单结构 -->
+    <select id="selectMenu" resultMap="ResuMenuMap">
+        select distinct sp.power_id, sp.* from sys_power sp
+        left join sys_role_power srp on srp.power_id = sp.power_id
+        left join sys_role sr on sr.role_id = srp.role_id
+        left join sys_user_role sur on sur.role_id = sr.role_id
+        where sur.user_id = #{userId}
+        and sr.enable = 1
+        and sp.enable = 1
+        and sp.power_type != 2
+        order by sp.sort asc
+    </select>
+
+</mapper>

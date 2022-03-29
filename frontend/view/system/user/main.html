@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="../../../component/pear/css/pear.css" />
+    <link rel="stylesheet" href="../../../admin/css/other/user.css" />
+    <style>
+        .layui-card-body {
+            position: static;
+        }
+    </style>
+</head>
+<body class="pear-container">
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form" action="" lay-filter="user-query-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="nickname" placeholder="" class="layui-input">
+                </div>
+                <label class="layui-form-label">账号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" placeholder="" class="layui-input">
+                </div>
+                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
+                    <i class="layui-icon layui-icon-search"></i>
+                    查询
+                </button>
+                <button type="reset" class="pear-btn pear-btn-md">
+                    <i class="layui-icon layui-icon-refresh"></i>
+                    重置
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+    <div class="user-left user-collasped">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div style="overflow: auto">
+                    <ul id="dept-tree" class="dept-tree" data-id="0"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="user-main user-collasped">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <table id="user-table" lay-filter="user-table" class="cardBody"></table>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type="text/html" id="user-toolbar">
+    <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+        <i class="pear-icon pear-icon-add"></i>
+        新增
+    </button>
+    <button class="pear-btn pear-btn-md" lay-event="batchRemove">
+        <i class="pear-icon pear-icon-ashbin"></i>
+        删除
+    </button>
+    <button class="pear-btn pear-btn-md" lay-event="collasped">
+        <i class="pear-icon pear-icon-modular"></i>
+        高级
+    </button>
+</script>
+
+<script type="text/html" id="user-bar">
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="pear-icon pear-icon-edit"></i></button>
+    <button class="pear-btn pear-btn-warming pear-btn-sm" lay-event="power"><i class="layui-icon layui-icon-vercode"></i></button>
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="pear-icon pear-icon-ashbin"></i></button>
+</script>
+
+<script type="text/html" id="user-enable">
+    <input type="checkbox" name="enable" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="user-enable" {{ d.enable== '1' ? 'checked' : '' }} />
+</script>
+
+<script type="text/html" id="user-gender">
+    {{#if (d.gender == 0) { }}
+    <span>男</span>
+    {{# }else if(d.gender == 1){ }}
+    <span>女</span>
+    {{# } }}
+</script>
+<script src="../../../component/layui/layui.js"></script>
+<script src="../../../component/pear/applicationUtil.js"></script>
+<script src="../../../component/pear/pear.js"></script>
+<script>
+    layui.use(['table', 'dtree','form', 'jquery','popup','common','restClient','notice'], function () {
+        let table = layui.table;
+        let form = layui.form;
+        let $ = layui.jquery;
+        let dtree = layui.dtree;
+        let popup = layui.popup;
+        let common = layui.common;
+        let restClient = layui.restClient;
+        let cols = [
+            [
+                {type: 'checkbox'},
+                {title: '姓名', field: 'nickname', align: 'center', width: 110},
+                {title: '账号', field: 'username', align: 'center'},
+                {title: '性别', field: 'gender', align: 'center', templet: '#user-gender',width: 60},
+                {title: '电话', field: 'phone', align: 'center'},
+                {title: '启用', field: 'enable', align: 'center', templet: '#user-enable',width: 120},
+                {title: '注册时间', field: 'createTime', align: 'center'},
+                {title: '操作', toolbar: '#user-bar', align: 'center', width: 195}
+            ]
+        ]
+
+        table.render({
+            elem: '#user-table',
+            url: applicationUtil.URL+'/api/sys/user/page',
+            page: true,
+            cols: cols,
+            skin: 'line',
+            toolbar: '#user-toolbar',
+            headers: applicationUtil.authorization,
+            text: {none: '暂无人员信息'}
+        });
+
+        dtree.render({
+            elem: "#dept-tree",
+            method: "get",
+            headers: applicationUtil.authorization,
+            url: applicationUtil.URL+'/api/sys/dept/tree',
+            dataFormat: "list",
+            line: true,
+            skin: "laySimple",
+            icon: "-1",
+            response: {treeId: "deptId", parentId: "parentId", title: "deptName"},
+        });
+        dtree.on("node('dept-tree')" ,function(obj){
+            let field = form.val("user-query-form");
+            var childData = dtree.getChildParam("dept-tree",obj.param.nodeId);
+            let deptIds = [];
+            $.each(childData,function(index,value){
+                deptIds.push(value.nodeId)
+            });
+            deptIds.push(obj.param.nodeId)
+            field.deptIds =  deptIds;
+            console.log(field)
+            window.refresh(field);
+        });
+        table.on('tool(user-table)', function (obj) {
+            if (obj.event === 'remove') {
+                window.remove(obj);
+            } else if (obj.event === 'edit') {
+                window.edit(obj);
+            } else if (obj.event === 'power') {
+                window.power(obj);
+            }
+        });
+
+        table.on('toolbar(user-table)', function (obj) {
+            if (obj.event === 'add') {
+                window.add();
+            } else if (obj.event === 'refresh') {
+                window.refresh();
+            } else if (obj.event === 'batchRemove') {
+                window.batchRemove(obj);
+            } else if(obj.event === 'collasped'){
+                $(".user-left").toggleClass("user-collasped");
+                $(".user-main").toggleClass("user-collasped");
+                table.resize();
+            }
+        });
+
+        form.on('submit(user-query)', function (data) {
+            window.refresh(data.field);
+            return false;
+        });
+
+        form.on('switch(user-enable)', function (obj) {
+            let operate;
+            if (obj.elem.checked) {
+                operate = "enable";
+            } else {
+                operate = "disable";
+            }
+            let loading = layer.load();
+            restClient.put(applicationUtil.URL + "/api/sys/user/"+operate,JSON.stringify({id: this.value}), (res) => {
+                layer.close(loading);
+                if (res.success) {
+                    popup.success(res.msg);
+                } else {
+                    popup.failure(res.msg);
+                }
+            });
+        });
+
+        window.add = function () {
+            layer.open({
+                type: 2,
+                title: '新增',
+                shade: 0.1,
+                area: ['550px', '550px'],
+                content: 'add.html'
+            });
+        }
+
+        window.edit = function (obj) {
+            layer.open({
+                type: 2,
+                title: '修改',
+                shade: 0.1,
+                area: ['550px', '500px'],
+                content: 'edit.html?userData=' + encodeURIComponent(JSON.stringify(obj.data))
+            });
+        }
+        window.power = function (obj) {
+            layer.open({
+                type: 2,
+                title: '分配角色',
+                shade: 0.1,
+                area: ['550px', '400px'],
+                content: 'power.html?userId=' + encodeURIComponent(JSON.stringify(obj.data.id))
+            });
+        }
+
+        window.remove = function(obj){
+            layer.confirm('确定要删除该用户', {icon: 3, title:'提示'}, function(index){
+                layer.close(index);
+                let loading = layer.load();
+                restClient.remove(applicationUtil.URL + '/api/sys/user/remove/?id='+obj.data['id'],null, (res) => {
+                    layer.close(loading);
+                    if (res.success) {
+                        layer.msg(res.msg, {icon: 1, time: 1000});
+                        window.refresh();
+                    } else {
+                        layer.msg(res.msg, {icon: 2, time: 1000});
+                    }
+                });
+            });
+        }
+
+        window.batchRemove = function(obj){
+            let ids = common.checkField(obj,'id');
+            if (common.isEmpty(ids)) {
+                popup.warning("未选中数据");
+                return false;
+            }
+            layer.confirm('确定要删除这些用户', {icon: 3, title:'提示'}, function(index){
+                layer.close(index);
+                let loading = layer.load();
+                restClient.remove(applicationUtil.URL + '/api/sys/user/removeBatch/?ids='+ids,null, (res) => {
+                    layer.close(loading);
+                    if (res.success) {
+                        layer.msg(res.msg, {icon: 1, time: 1000});
+                        window.refresh();
+                    } else {
+                        layer.msg(res.msg, {icon: 2, time: 1000});
+                    }
+                });
+            });
+        }
+        window.refresh = function (param) {
+            table.reload('user-table', {where: param});
+        }
+    })
+</script>
+</html>

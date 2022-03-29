@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pearadmin.pro.modules.sys.repository.SysRoleRepository">
+
+    <select id="selectRoleByUserId" resultType="SysRole">
+        select * from sys_role sr
+        left join sys_user_role sur on sr.role_id = sur.role_id
+        left join sys_user su on su.id = sur.user_id
+        where su.id = #{userId} and sr.enable = 1
+    </select>
+
+    <select id="selectRole" parameterType="SysRoleRequest" resultType="SysRole">
+        select * from sys_role
+        <where>
+            <if test="request.roleName!=null and request.roleName!=''">
+                role_name like concat('%', #{request.roleName}, '%')
+            </if>
+            <if test="request.roleCode!=null and request.roleCode!=''">
+                role_code like concat('%', #{request.roleCode}, '%')
+            </if>
+        </where>
+    </select>
+    <!-- 根据 Id 修改角色数据 -->
+    <update id="updateById" parameterType="SysRole">
+        update sys_role
+        <set>
+            <if test="roleName!=null and roleName!=''">
+                role_name = #{roleName},
+            </if>
+            <if test="roleCode!=null and roleCode!=''">
+                role_code = #{roleCode},
+            </if>
+            <if test="enable!=null and enable!=''">
+                enable = #{enable},
+            </if>
+            <if test="details!=null and details!=''">
+                details = #{details},
+            </if>
+            <if test="sort!=null and sort!=''">
+                sort = #{sort},
+            </if>
+        </set>
+        where role_id = #{roleId}
+    </update>
+
+</mapper>

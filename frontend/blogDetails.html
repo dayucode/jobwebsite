@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title> DaYu Admin Layui </title>
+    <!-- 依 赖 样 式 -->
+    <link rel="stylesheet" href="component/pear/css/pear.css"/>
+    <!-- 加 载 样 式 -->
+    <link rel="stylesheet" href="admin/css/loader.css"/>
+    <link rel="stylesheet" href="admin/css/blogDetails.css"/>
+    <style>
+        .spanTxt {
+            word-break: normal;
+            width: auto;
+            display: block;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout">
+        <div class="top">
+            <div class="header">
+                <ul class="layui-nav header-left" lay-bar="disabled">
+                    <li class="layui-nav-item">
+                        <a class="layui-icon layui-icon-login-wechat" href="home.html" style="font-size: 25px"></a>
+                    </li>
+                    <li class="layui-nav-item"><a href="home.html">首页</a></li>
+                    <li class="layui-nav-item"><a href="position.html">职位</a></li>
+                </ul>
+                <ul class="layui-nav header-right" lay-bar="disabled">
+                    <li class="layui-nav-item layui-hide-xs message"></li>
+                    <li class="layui-nav-item">
+                        <a class="layui-icon layui-icon-username" href="javascript:;"></a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="register.html">新用户注册</a></dd>
+                            <dd><a href="javascript:;" onclick="enterPerson()">基本资料</a></dd>
+                            <dd><a href="javascript:;" class="logout">注销登录</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item" onclick="enterAdmin()"><a>个人/企业</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="context-back">
+            <div class="context">
+                <div class="layui-card context-left">
+                    <div style="text-align: center">
+                        <img id="avatar" src="pic/carousel/1.png">
+                    </div>
+                    <div>
+                        <div class="layui-card-header" style="font-size: 16px!important;color: #333;font-weight: bold;text-align: center">
+                            <h2 id="title">职位描述</h2>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="layui-card-header" style="font-size: 16px!important;color: #333;">
+                            <p id="context">工作地址</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+<!-- 依 赖 脚 本 -->
+<script src="component/layui/layui.js"></script>
+<script src="component/pear/applicationUtil.js"></script>
+<script src="component/pear/pear.js"></script>
+<script src="view/js/home_jop_own.js"></script>
+<!-- 框 架 初 始 化 -->
+<script>
+    layui.use(['toast','admin', 'jquery', 'popup', 'dropdown', 'util', 'carousel', 'card', 'restClient', 'form'], function () {
+        var $ = layui.jquery;
+        var admin = layui.admin;
+        var popup = layui.popup;
+        var restClient = layui.restClient;
+        var blogId = JSON.parse(decodeURIComponent(getPathParam("id")));
+        var res = restClient.getSync(applicationUtil.URL + '/api/sys/blog/IndexOne?id='+blogId)
+        if (res.code === 200){
+            $("#title").html(res.data.title);
+            $("#context").html(res.data.context);
+            var avatar = $("#avatar").val();
+            avatar.src = res.data.avatar;
+        }
+        // 登出逻辑
+        admin.logout(function () {
+            localStorage.removeItem('token');
+            localStorage.removeItem('tokenKey');
+            popup.success("注销成功", function () {
+                location.href = "login.html";
+            })
+            return true;
+        })
+    })
+</script>
+</body>
+</html>

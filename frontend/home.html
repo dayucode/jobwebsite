@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title> DaYu Admin Layui </title>
+    <!-- 依 赖 样 式 -->
+    <link rel="stylesheet" href="component/pear/css/pear.css"/>
+    <!-- 加 载 样 式 -->
+    <link rel="stylesheet" href="admin/css/loader.css"/>
+    <link rel="stylesheet" href="admin/css/home.css"/>
+    <style>
+        .spanTxt{
+            word-break:normal;
+            width:auto;
+            display:block;
+            white-space:pre-wrap;
+            word-wrap : break-word ;
+            overflow: hidden ;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout">
+    <div class="top">
+        <div class="header">
+            <ul class="layui-nav header-left" lay-bar="disabled">
+                <li class="layui-nav-item">
+                    <a class="layui-icon layui-icon-login-wechat" href="home.html" style="font-size: 25px"></a>
+                </li>
+                <li class="layui-nav-item"><a href="home.html">首页</a></li>
+                <li class="layui-nav-item"><a href="position.html">职位</a></li>
+            </ul>
+            <ul class="layui-nav header-right" lay-bar="disabled">
+                <li class="layui-nav-item layui-hide-xs message"></li>
+                <li class="layui-nav-item">
+                    <a class="layui-icon layui-icon-username" href="javascript:;"></a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="register.html">新用户注册</a></dd>
+                        <dd><a href="javascript:;" onclick="enterPerson()">基本资料</a></dd>
+                        <dd><a href="javascript:;" class="logout">注销登录</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item" onclick="enterAdmin()"><a>个人/企业</a></li>
+            </ul>
+        </div>
+        <div class="middle-search">
+            <div class="search">
+                <form class="layui-form" action="" lay-filter="user-query-form">
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <input type="text" id="search_input" class="layui-input input-search" tabindex="1" maxlength="64"
+                                   autocomplete="off" value="" placeholder="搜索职位、公司或地点" name="searchWord">
+                        </div>
+                        <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
+                            <i class="layui-icon layui-icon-search"></i>
+                            查询
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="middle-content">
+        <div class="left-slide-menu">
+            <div class="layui-panel">
+                <ul class="layui-menu" id="docDemoMenu1">
+                    <li class="layui-menu-item-parent">
+                        <div class="layui-menu-body-title">
+                            IT服务
+                            <i class="layui-icon layui-icon-right"></i>
+                        </div>
+                        <div class="layui-panel layui-menu-body-panel">
+                            <ul>
+                                <li lay-options="{categoryCode: 1001000}">
+                                    <div class="layui-menu-body-title">计算机软件/硬件/信息服务</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1001001}">
+                                    <div class="layui-menu-body-title">互联网和相关服务</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1001002}">
+                                    <div class="layui-menu-body-title">其他</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="layui-menu-item-parent">
+                        <div class="layui-menu-body-title">
+                            制造业
+                            <i class="layui-icon layui-icon-right"></i>
+                        </div>
+                        <div class="layui-panel layui-menu-body-panel">
+                            <ul>
+                                <li lay-options="{categoryCode: 1002000}">
+                                    <div class="layui-menu-body-title">机械/电子</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1003000}">
+                                    <div class="layui-menu-body-title">服装/纺织</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1002002}">
+                                    <div class="layui-menu-body-title">其他</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="layui-menu-item-parent">
+                        <div class="layui-menu-body-title">
+                            批发/零售
+                            <i class="layui-icon layui-icon-right"></i>
+                        </div>
+                        <div class="layui-panel layui-menu-body-panel">
+                            <ul>
+                                <li lay-options="{categoryCode: 1003008}">
+                                    <div class="layui-menu-body-title">批发</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1003010}">
+                                    <div class="layui-menu-body-title">零售</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1003001}">
+                                    <div class="layui-menu-body-title">其他</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="layui-menu-item-parent">
+                        <div class="layui-menu-body-title">
+                            医疗
+                            <i class="layui-icon layui-icon-right"></i>
+                        </div>
+                        <div class="layui-panel layui-menu-body-panel">
+                            <ul>
+                                <li lay-options="{categoryCode: 1009000}">
+                                    <div class="layui-menu-body-title">医院/医疗机构</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1009003}">
+                                    <div class="layui-menu-body-title">医疗器械</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1009004}">
+                                    <div class="layui-menu-body-title">其他</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="layui-menu-item-parent">
+                        <div class="layui-menu-body-title">
+                            生活服务
+                            <i class="layui-icon layui-icon-right"></i>
+                        </div>
+                        <div class="layui-panel layui-menu-body-panel">
+                            <ul>
+                                <li lay-options="{categoryCode: 1004001}">
+                                    <div class="layui-menu-body-title">餐饮</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1004004}">
+                                    <div class="layui-menu-body-title">居民服务</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1004002}">
+                                    <div class="layui-menu-body-title">其他</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="layui-menu-item-parent">
+                        <div class="layui-menu-body-title">
+                            文化/体育/娱乐业
+                            <i class="layui-icon layui-icon-right"></i>
+                        </div>
+                        <div class="layui-panel layui-menu-body-panel">
+                            <ul>
+                                <li lay-options="{categoryCode: 1005001}">
+                                    <div class="layui-menu-body-title">文化/体育</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1005002}">
+                                    <div class="layui-menu-body-title">娱乐/旅游</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1005000}">
+                                    <div class="layui-menu-body-title">其他</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="layui-menu-item-parent">
+                        <div class="layui-menu-body-title">
+                            建筑/房地产
+                            <i class="layui-icon layui-icon-right"></i>
+                        </div>
+                        <div class="layui-panel layui-menu-body-panel">
+                            <ul>
+                                <li lay-options="{categoryCode: 1006001}">
+                                    <div class="layui-menu-body-title">建筑业</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1006002}">
+                                    <div class="layui-menu-body-title">建材装修</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1006003}">
+                                    <div class="layui-menu-body-title">其他</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="layui-menu-item-parent">
+                        <div class="layui-menu-body-title">
+                            教育
+                            <i class="layui-icon layui-icon-right"></i>
+                        </div>
+                        <div class="layui-panel layui-menu-body-panel">
+                            <ul>
+                                <li lay-options="{categoryCode: 1007000}">
+                                    <div class="layui-menu-body-title">学前教育</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1007001}">
+                                    <div class="layui-menu-body-title">初中等教育</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1007002}">
+                                    <div class="layui-menu-body-title">高等教育</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="layui-menu-item-parent">
+                        <div class="layui-menu-body-title">
+                            运输/物流/仓储
+                            <i class="layui-icon layui-icon-right"></i>
+                        </div>
+                        <div class="layui-panel layui-menu-body-panel">
+                            <ul>
+                                <li lay-options="{categoryCode: 1008003}">
+                                    <div class="layui-menu-body-title">物流/仓储</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1008000}">
+                                    <div class="layui-menu-body-title">道路/铁路运</div>
+                                </li>
+                                <li lay-options="{categoryCode: 1008006}">
+                                    <div class="layui-menu-body-title">道路/铁路运</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="right-slide-carousel">
+            <div class="layui-carousel" id="test10">
+                <div carousel-item="" id="indexPic">
+<!--                    <div><img src="pic/carousel/1.png" onclick="turnBlog(res.data[key].id)"></div>-->
+<!--                    <div><img src="pic/carousel/2.png"></div>-->
+<!--                    <div><img src="pic/carousel/3.png"></div>-->
+<!--                    <div><img src="pic/carousel/4.png"></div>-->
+<!--                    <div><img src="pic/carousel/1.png"></div>-->
+<!--                    <div><img src="pic/carousel/2.png"></div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="car-table" id="currentTableId"></div>
+    <div class="footer">
+        <span>Copyright © 2021 「本站仅为 layui 文档保留的镜像站点，与官方无关」 MIT Licensed 免责声明 友链 公众号  公网安备 00000000000000号 ICP备00000000号</span>
+    </div>
+</div>
+<!-- 依 赖 脚 本 -->
+<script src="component/layui/layui.js"></script>
+<script src="component/pear/applicationUtil.js"></script>
+<script src="component/pear/pear.js"></script>
+<script src="view/js/home_jop_own.js"></script>
+<!-- 框 架 初 始 化 -->
+<script>
+    layui.use(['admin', 'jquery', 'popup','dropdown','util','carousel','card','restClient','form'], function () {
+        var $ = layui.jquery;
+        var admin = layui.admin;
+        var popup = layui.popup;
+        var dropdown = layui.dropdown;
+        var util = layui.util;
+        var carousel = layui.carousel;
+        var card = layui.card;
+        var restClient = layui.restClient;
+        var form = layui.form;
+        admin.setConfigPath('config/pear.config.yml')
+        admin.setMenuPath(applicationUtil.URL + "/api/sys/user/menu");
+        admin.render();
+
+        var res = layui.restClient.getSync(applicationUtil.URL + '/api/sys/blog/listIndex')
+        console.log(res)
+        var options = [];
+        if (res.code === 200 && res.data.length>0){
+            for (const key in res.data) {
+                options.push("<div><img class='layui-table-link' blogId ="+res.data[key].id+" src="+res.data[key].avatar+" data-method='detail'></div>");
+            }
+            $("#indexPic").append(options.join(''));
+        }
+        //菜单点击事件
+        dropdown.on('click(docDemoMenu1)', function(options){
+            card.reload("currentTableId", {
+                where: options
+            });
+            return false;
+        });
+        util.event('lay-active', {
+            normal: function(){
+                $('#demo-box').children().addClass('layui-col-md3').removeClass('layui-col-md4');
+                $('#demo-box').find('.layui-menu').removeClass('layui-menu-lg');
+            }
+            ,lg: function(){
+                $('#demo-box').children().addClass('layui-col-md4').removeClass('layui-col-md3')
+                $('#demo-box').find('.layui-menu').addClass('layui-menu-lg');
+            }
+        });
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            ,width: '750px'
+            ,height: '350px'
+            ,interval: 5000
+        });
+        card.render({
+            elem: '#currentTableId',
+            url: applicationUtil.URL+'/api/sys/position/noAuth/allPosition',
+            data: [], // 静态数据
+            page: true, // 是否分页
+            limit: 8, // 每页数量
+            linenum: 4, // 每行数量
+            clickItem: function(data){ // 单击事件
+                console.log(data)
+            }
+        })
+        form.on('submit(data-checked-btn)', function() {
+            var data = card.getChecked("currentTableId");
+            layer.msg(JSON.stringify(data));
+            return false;
+        });
+        form.on('submit(data-btn)', function() {
+            var data = card.getAllData("currentTableId");
+            layer.msg(JSON.stringify(data));
+            return false;
+        });
+
+        form.on('submit(user-query)', function(data) {
+            card.reload("currentTableId", {
+                where: data.field
+            });
+            return false;
+        });
+        // 登出逻辑
+        admin.logout(function () {
+            localStorage.removeItem('token');
+            localStorage.removeItem('tokenKey');
+            popup.success("注销成功",function(){
+                location.href = "login.html";
+            })
+            popup.success("注销成功", function () {
+                location.href = "login.html";
+            })
+            return true;
+        })
+        // 初始化消息回调
+        admin.message();
+        var active = {
+            detail: function(){
+                var blogId = $(this).attr("blogId");
+                location.href = 'blogDetails.html?id=' + encodeURIComponent(JSON.stringify(blogId));
+            }
+        };
+        $(document).on('click','.layui-table-link', function(){
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+        });
+    })
+</script>
+</body>
+</html>

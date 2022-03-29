@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pearadmin.pro.modules.sys.repository.SysConfigRepository">
+
+    <select id="selectConfig" resultType="SysConfig">
+        select * from sys_config sc
+        <where>
+            <if test="request.name != null and request.name !='' ">
+                and sc.name like concat('%', #{request.name}, '%')
+            </if>
+            <if test="request.key != null and request.key !='' ">
+                and sc.key like concat('%', #{request.key}, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

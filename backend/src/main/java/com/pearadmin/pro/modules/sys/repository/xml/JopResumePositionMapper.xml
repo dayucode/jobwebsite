@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pearadmin.pro.modules.sys.repository.JopResumePositionRepository">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.pearadmin.pro.modules.sys.entity.JopResumePosition">
+        <result column="id" property="id"/>
+        <result column="resume_id" property="resumeId"/>
+        <result column="position_id" property="positionId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="type" property="type"/>
+        <result column="msg" property="msg"/>
+        <result column="reply_time" property="replyTime"/>
+        <result column="accept_status" property="acceptStatus"/>
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,resume_id,position_id,create_time,type,msg,replyTime,accept_status
+    </sql>
+
+    <select id="selectJopResumePosition" resultType="map">
+        SELECT
+        jrp.id,
+        jrp.resume_id,
+        jrp.position_id,
+        jp.user_id as position_user_id,
+        jr.user_id as resume_user_id,
+        jr.apply,
+        jr.name,
+        jr.phone,
+        jr.sex,
+        jr.email,
+        date_format(jrp.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+        date_format(jrp.reply_time,'%Y-%m-%d %H:%i:%s') as reply_time,
+        jrp.type,
+        jrp.msg,
+        jrp.accept_status,
+        jp.category_code,
+        jp.company_id,
+        jp.province_code,
+        jp.city_code,
+        jp.detailed_place,
+        jp.county_code,
+        date_format(jp.create_time,'%Y-%m-%d %H:%i:%s') as position_create_time,
+        date_format(jp.update_time,'%Y-%m-%d %H:%i:%s') as position_update_time,
+        jp.title,
+        jp.introduction,
+        jp.high_salary,
+        jp.low_salary,
+        jp.treatment,
+        jp.requirement,
+        jp.education_require,
+        jp.work_hours,
+        jp.work_years,
+        jc.company_name,
+        jc.capital,
+        jc.scale,
+        jc.province_code AS company_province_code,
+        jc.county_code AS company_county_code,
+        jc.city_code AS company_city_code,
+        jc.detailed_place AS company_detailed_place
+        FROM
+        jop_resume_position jrp
+        LEFT JOIN jop_position jp ON jrp.position_id = jp.id
+        LEFT JOIN jop_resume jr ON jrp.resume_id = jr.id
+        LEFT JOIN jop_company jc ON jp.company_id = jc.id
+        WHERE 1=1
+        AND jc.STATUS = '1'
+        AND jp.enable = '0'
+        <if test="request.resumeUserId!=null and request.resumeUserId!=''">
+            and jr.user_id like concat('%', #{request.resumeUserId}, '%')
+        </if>
+        <if test="request.positionUserId!=null and request.positionUserId!=''">
+            and jp.user_id like concat('%', #{request.positionUserId}, '%')
+        </if>
+        <if test="request.resumeId!=null and request.resumeId!=''">
+            and jr.id like concat('%', #{request.resumeId}, '%')
+        </if>
+        <if test="request.positionId!=null and request.positionId!=''">
+            and jp.id like concat('%', #{request.positionId}, '%')
+        </if>
+        <if test="request.companyId!=null and request.companyId!=''">
+            and jc.id like concat('%', #{request.companyId}, '%')
+        </if>
+        <if test="request.companyName!=null and request.companyName!=''">
+            and jc.company_name like concat('%', #{request.companyName}, '%')
+        </if>
+        <if test="request.title!=null and request.title!=''">
+            and jp.title like concat('%', #{request.title}, '%')
+        </if>
+        ORDER BY jrp.create_time DESC
+    </select>
+
+
+
+</mapper>

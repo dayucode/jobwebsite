@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pearadmin.pro.modules.sys.repository.JopCompanyRepository">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="JopCompany">
+        <result column="id" property="id"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="user_id" property="userId"/>
+        <result column="company_name" property="companyName"/>
+        <result column="business_no" property="businessNo"/>
+        <result column="legal" property="legal"/>
+        <result column="type" property="type"/>
+        <result column="capital" property="capital"/>
+        <result column="scale" property="scale"/>
+        <result column="province_code" property="provinceCode"/>
+        <result column="county_code" property="countyCode"/>
+        <result column="city_code" property="cityCode"/>
+        <result column="detailed_place" property="detailedPlace"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,create_time,update_time,user_id, company_name, business_no, legal, type, capital, scale, phone, email,province_code,county_code,city_code,detailed_place
+    </sql>
+    <select id="selectJopCompany" resultType="com.pearadmin.pro.modules.sys.entity.JopCompany">
+        select * from jop_company
+        <where>
+            <if test="request.userId!=null and request.userId!=''">
+                user_id like concat('%', #{request.userId}, '%')
+            </if>
+            <if test="request.companyName!=null and request.companyName!=''">
+                and  company_name like concat('%', #{request.companyName}, '%')
+            </if>
+            <if test="request.businessNo!=null and request.businessNo!=''">
+                and  business_no like concat('%', #{request.businessNo}, '%')
+            </if>
+            <if test="request.type!=null and request.type!=''">
+                and `type like` concat('%', #{request.type}, '%')
+            </if>
+            <if test="request.provinceCode!=null and request.provinceCode!=''">
+                and province_code like concat('%', #{request.provinceCode}, '%')
+            </if>
+            <if test="request.countyCode!=null and request.countyCode!=''">
+                and county_code like concat('%', #{request.countyCode}, '%')
+            </if>
+            <if test="request.cityCode!=null and request.cityCode!=''">
+                and city_code like concat('%', #{request.cityCode}, '%')
+            </if>
+            <if test="request.status!=null and request.status!=''">
+                and  status like concat('%', #{request.status}, '%')
+            </if>
+        </where>
+    </select>
+    <select id="selectCompanyMap" resultType="map">
+        select * from jop_company
+        <where>
+            <if test="request.userId!=null and request.userId!=''">
+                user_id like concat('%', #{request.userId}, '%')
+            </if>
+            <if test="request.companyName!=null and request.companyName!=''">
+                and  company_name like concat('%', #{request.companyName}, '%')
+            </if>
+            <if test="request.businessNo!=null and request.businessNo!=''">
+                and  business_no like concat('%', #{request.businessNo}, '%')
+            </if>
+            <if test="request.type!=null and request.type!=''">
+                and `type like` concat('%', #{request.type}, '%')
+            </if>
+            <if test="request.provinceCode!=null and request.provinceCode!=''">
+                and province_code like concat('%', #{request.provinceCode}, '%')
+            </if>
+            <if test="request.countyCode!=null and request.countyCode!=''">
+                and county_code like concat('%', #{request.countyCode}, '%')
+            </if>
+            <if test="request.cityCode!=null and request.cityCode!=''">
+                and city_code like concat('%', #{request.cityCode}, '%')
+            </if>
+            <if test="request.status!=null and request.status!=''">
+                and  status like concat('%', #{request.status}, '%')
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pearadmin.pro.modules.sys.repository.SysDictDataRepository">
+
+    <select id="selectDictData" resultType="SysDictData">
+        select * from sys_dict_data sdd
+        <where>
+            <if test="request.code!=null and request.code!=''">
+                sdd.code = #{request.code}
+            </if>
+        </where>
+    </select>
+
+</mapper>

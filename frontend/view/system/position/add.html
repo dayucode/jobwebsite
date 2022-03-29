@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>职位新增</title>
+    <link href="../../../component/pear/css/pear.css" rel="stylesheet" />
+    <style>
+        #area-picker input {
+            width: 150px;
+        }
+
+        .area .layui-form-item .layui-inline {
+            margin-right: 4px !important;
+        }
+
+        #area-picker .layui-select-title {
+            width: 150px;
+        }
+
+        #area-picker2 input {
+            width: 150px;
+        }
+
+        #area-picker2 .layui-select-title {
+            width: 150px;
+        }
+
+        .layui-form-label {
+            width: 85px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+            padding: 9px 15px;
+        }
+
+        .layui-input, .layui-textarea {
+            display: block;
+            width: 470px;
+            padding-left: 10px;
+        }
+
+        .layui-form-select .layui-edge {
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+                <label class="layui-form-label">所属公司:</label>
+                <div class="layui-inline">
+                    <select id="companyId" name="companyId" lay-verify="require"></select>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">所属行业:</label>
+                    <div class="layui-inline">
+                        <select name="categoryCode" lay-filter="require">
+                            <option value="">不限行业</option>
+                            <option value="1001000">计算机软件/硬件/信息服务</option>
+                            <option value="1001001">互联网和相关服务</option>
+                            <option value="1001002">IT服务-其他</option>
+                            <option value="1002000">机械/电子</option>
+                            <option value="1003000">服装/纺织</option>
+                            <option value="1002002">制造业-其他</option>
+                            <option value="1003008">批发</option>
+                            <option value="1003010">零售</option>
+                            <option value="1003001">批发/零售-其他</option>
+                            <option value="1009000">医院/医疗机构</option>
+                            <option value="1009003">医疗器械</option>
+                            <option value="1009004">医疗-其他</option>
+                            <option value="1004001">餐饮</option>
+                            <option value="1004004">居民服务</option>
+                            <option value="1004002">生活服务-其他</option>
+                            <option value="1005001">文化/体育</option>
+                            <option value="1005002">娱乐/旅游</option>
+                            <option value="1005000">文化/体育/娱乐业-其他</option>
+                            <option value="1006001">建筑业</option>
+                            <option value="1006002">建材装修</option>
+                            <option value="1006003">建筑/房地产-其他</option>
+                            <option value="1007000">学前教育</option>
+                            <option value="1007001">初中等教育</option>
+                            <option value="1007002">高等教育</option>
+                            <option value="1008003">物流/仓储</option>
+                            <option value="1008000">道路/铁路运</option>
+                            <option value="1008006">运输/物流/仓储-其他</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">职位名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" lay-verify="require" autocomplete="off" placeholder="请输入标题"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">职位介绍</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入描述" name="introduction" lay-verify="require" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">职位待遇</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入描述" name="treatment" lay-verify="require" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">最高薪资(K)</label>
+                    <div class="layui-input-block">
+                        <input type="number" placeholder="请输入标题" value="" class="layui-input"
+                               lay-verify="number" name="highSalary" lay-verify="require"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">最低薪资(K)</label>
+                    <div class="layui-input-block">
+                        <input type="number" placeholder="请输入标题" value="" class="layui-input"
+                               lay-verify="number" name="lowSalary" lay-verify="require"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">学历要求</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="educationRequire" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">职位要求</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入描述" name="requirement" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">年限要求</label>
+                    <div class="layui-input-block">
+                        <input type="number" placeholder="请输入标题" value="" class="layui-input"  name="workYears"/>
+                    </div>
+                </div>
+                <div class="area">
+                    <div class="layui-form-item">
+                        <div id="area-picker">
+                            <label class="layui-form-label">工作地:</label>
+                            <div class="layui-inline">
+                                <select name="provinceCode" class="province-selector" lay-verify="required">
+                                    <option value="">请选择省</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select name="cityCode" class="city-selector" lay-verify="required">
+                                    <option value="">请选择市</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select name="countyCode" class="county-selector" lay-verify="required">
+                                    <option value="">请选择区</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">详细工作地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="detailedPlace" lay-verify="required" autocomplete="off" placeholder="请输入标题"
+                               class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="form-save">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="pear-btn pear-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
+<script src="../../../component/layui/layui.js"></script>
+<script src="../../../component/pear/applicationUtil.js"></script>
+<script src="../../../component/pear/pear.js"></script>
+<script>
+    layui.use(['form', 'jquery','restClient','area','toast'], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let restClient = layui.restClient;
+        let area = layui.area;
+        let toast = layui.toast;
+        var options = [];
+        options.push('<option value="">请选择标题</option>')
+        var res = restClient.getSync(applicationUtil.URL + '/api/sys/company/userCompany',{ status: "1"})
+        if(res.data.length<1){
+            toast.info({
+                title: 'Caution',
+                message: '企业认证后才可发布职位',
+                position: 'topCenter'
+            });
+        }
+        if (res.code === 0){
+            for (const key in res.data) {
+                options.push("<option value='" + res.data[key].id + "'> " + res.data[key].companyName + " </option>");
+            }
+            $("#companyId").append(options.join(''));
+        }
+
+        area.render({
+            elem: '#area-picker',
+            change: function (res) {
+                //选择结果
+                console.log(res);
+            }
+        });
+
+        form.on('submit(form-save)', function (data) {
+            var companyId = $("#companyId").val();
+            if (companyId==null){
+                toast.info({
+                    title: 'Caution',
+                    message: '企业认证后才可发布职位',
+                    position: 'topCenter'
+                });
+                return false;
+            }
+            restClient.post(applicationUtil.URL + '/api/sys/position/save', JSON.stringify(data.field), (res) => {
+                if (res.success) {
+                    layer.msg(res.msg, {icon: 1, time: 1000}, function () {
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+                        parent.layui.table.reload("dataTable");
+                    });
+                } else {
+                    layer.msg(res.msg, {icon: 2, time: 1000});
+                }
+            });
+            return false;
+        });
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>我的申请</title>
+	<link href="../../../../component/pear/css/pear.css" rel="stylesheet" />
+</head>
+<body class="pear-container">
+<div class="layui-card">
+	<div class="layui-card-body">
+		<form class="layui-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label">职位名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="title" placeholder="" class="layui-input">
+				</div>
+				<label class="layui-form-label">公司名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="companyName" placeholder="" class="layui-input">
+				</div>
+				<button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="form-query">
+					<i class="layui-icon layui-icon-search"></i>
+					查询
+				</button>
+				<button type="reset" class="pear-btn pear-btn-md">
+					<i class="layui-icon layui-icon-refresh"></i>
+					重置
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="layui-card">
+	<div class="layui-card-body">
+		<table id="dataTable" lay-filter="dataTable"></table>
+	</div>
+</div>
+<script type="text/html" id="leftBar">
+	<button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="view"><i>职位详情</i></button>
+	<button class="pear-btn pear-btn-warming pear-btn-sm" lay-event="resume"><i>查看简历</i></button>
+	<button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
+</script>
+
+<script type="text/html" id="type-templet">
+	{{#  if (d.type == '1'){       }}
+	<span>未回复</span>
+	{{#  }else if(d.type == '2'){  }}
+	<span>通过</span>
+	{{#  }else if(d.type == '3'){  }}
+	<span>未通过</span>
+	{{# } }}
+</script>
+
+<script src="../../../../component/layui/layui.js"></script>
+<script src="../../../../component/pear/applicationUtil.js"></script>
+<script src="../../../../component/pear/pear.js"></script>
+<script>
+	layui.use(['table','form','jquery','restClient','toast'],function () {
+		let table = layui.table;
+		let form = layui.form;
+		let $ = layui.jquery;
+		let restClient = layui.restClient;
+		let toast = layui.toast;
+		let cols = [
+			[
+				{title: '职位名称', field: 'title', align:'center', width:100},
+				{title: '企业名称', field: 'company_name', align:'center'},
+				{title: '投递者', field: 'name', align:'center'},
+				{title: '投递时间', field: 'create_time', align:'center'},
+				{title: '通知状态', field: 'type', align:'center', templet:'#type-templet'},
+				{title: '回复时间', field: 'reply_time', align:'center'},
+				{title: '通知详情', field: 'msg', align:'center'},
+				{title: '操作', toolbar: '#leftBar', align:'center', width:220}
+			]
+		]
+		table.render({
+			elem: '#dataTable',
+			url: applicationUtil.URL+'/api/sys/resume-position/submitRecords',
+			page: true ,
+			cols: cols ,
+			skin: 'line',
+			toolbar: '#rightBar',
+			headers: applicationUtil.authorization,
+			text: {none: '暂无信息'}
+		});
+		table.on('tool(dataTable)', function(obj){
+			if(obj.event === 'remove'){
+				window.remove(obj);
+			}else if (obj.event === 'view'){
+				window.view(obj);
+			}else if (obj.event === 'resume'){
+				window.resume(obj);
+			}
+		});
+		form.on('submit(form-query)', function(data){
+			table.reload('dataTable',{where:data.field})
+			return false;
+		});
+		window.resume = function(obj){
+			const index = layer.open({
+				type: 2,
+				title: '预览',
+				shade: 0.4,
+				fix: false,
+				shadeClose: true,
+				area: ['70%', '100%'],
+				content: applicationUtil.URL + '/api/sys/resume/view/' + obj.data.resume_user_id
+			});
+			parent.layer.full(index);
+		}
+		window.view = function(obj){
+			layer.open({
+				type: 2,
+				title: '详情',
+				shade: 0.1,
+				area: ['690px', '550px'],
+				content: 'view.html?data=' + encodeURIComponent(JSON.stringify(obj.data))
+			});
+		}
+		window.remove = function(obj){
+			layer.confirm('确定要删除该申请', {icon: 3, title:'提示'}, function(index){
+				layer.close(index);
+				let loading = layer.load();
+				restClient.remove(applicationUtil.URL + '/api/sys/resume-position/remove/?id='+obj.data['id'],null, (res) => {
+					layer.close(loading);
+					if (res.success) {
+						layer.msg(res.msg, {icon: 1, time: 1000});
+						window.refresh();
+					} else {
+						layer.msg(res.msg, {icon: 2, time: 1000});
+					}
+				});
+			});
+		}
+		window.refresh = function(){
+			table.reload('dataTable');
+		}
+	})
+</script>
+</body>
+</html>

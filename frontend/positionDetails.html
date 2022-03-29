@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title> DaYu Admin Layui </title>
+    <!-- 依 赖 样 式 -->
+    <link rel="stylesheet" href="component/pear/css/pear.css"/>
+    <!-- 加 载 样 式 -->
+    <link rel="stylesheet" href="admin/css/loader.css"/>
+    <link rel="stylesheet" href="admin/css/positionDetails.css"/>
+    <style>
+        .spanTxt {
+            word-break: normal;
+            width: auto;
+            display: block;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout">
+        <div class="top">
+            <div class="header">
+                <ul class="layui-nav header-left" lay-bar="disabled">
+                    <li class="layui-nav-item">
+                        <a class="layui-icon layui-icon-login-wechat" href="home.html" style="font-size: 25px"></a>
+                    </li>
+                    <li class="layui-nav-item"><a href="home.html">首页</a></li>
+                    <li class="layui-nav-item"><a href="position.html">职位</a></li>
+                </ul>
+                <ul class="layui-nav header-right" lay-bar="disabled">
+                    <li class="layui-nav-item layui-hide-xs message"></li>
+                    <li class="layui-nav-item">
+                        <a class="layui-icon layui-icon-username" href="javascript:;"></a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="register.html">新用户注册</a></dd>
+                            <dd><a href="javascript:;" onclick="enterPerson()">基本资料</a></dd>
+                            <dd><a href="javascript:;" class="logout">注销登录</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item" onclick="enterAdmin()"><a>个人/企业</a></li>
+                </ul>
+            </div>
+            <div class="cardBack">
+                <div class="topCard">
+                    <div style="position: absolute;width: 100%">
+                        <div class="position-top-card-left">
+                            <div class="layui-card-header">
+                                <span id="title"></span>
+                                <span style="color:#ff5f32;margin-left: 15px" id="salary"></span>
+                            </div>
+                            <div class="layui-card-font-one" style="font-size: 20px">
+                                <span id="require"></span>
+                            </div>
+                            <div class="layui-card-font-two">
+                                <span class="layui-card-font-span" id="company_name"></span>
+                                <span class="layui-card-font-span" id="data_time"></span>
+                                <span class="layui-card-font-span">发布于招聘网</span>
+                            </div>
+                        </div>
+                        <div class="position-top-card-right">
+                            <div style="text-align: center;margin-top: 60px;">
+                                <button class="layui-btn"
+                                        style="width:150px;height:40px;font-size: 20px;background-color: #00a57f;border-color: #00a57f;"
+                                        lay-submit lay-filter="submit-resume">
+                                    投简历
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="context-back">
+            <div class="context">
+                <div class="layui-card context-left">
+                    <div>
+                        <div class="layui-card-header" style="font-size: 16px!important;color: #333;font-weight: bold;">
+                            职位待遇
+                        </div>
+                        <div class="layui-card-body">
+                            <p id="treatment"></p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="layui-card-header" style="font-size: 16px!important;color: #333;font-weight: bold;">
+                            职位描述
+                        </div>
+                        <div class="layui-card-body">
+                            <p id="requirement"></p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="layui-card-header" style="font-size: 16px!important;color: #333;font-weight: bold;">
+                            工作地址
+                        </div>
+                        <div class="layui-card-body">
+                            </li><span class="layui-card-font-span" style="color: #1fbf94;" id="provinceCityCounty">粒界科技</span>
+                            <span class="layui-card-font-span" id="detailed_place">2022-03-16</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card context-right">
+                    <div style="margin-top: 20px">
+                    <div class="layui-card-body">
+                        <li class="layui-icon layui-icon-fonts-strong" style="color: #0C0C0C"><span class="layui-card-font-span" style="color: #1fbf94;padding-left: 10px" id="company_nameTwo"></span>
+                    </div>
+                    <div class="layui-card-body">
+                        <li class="layui-icon layui-icon-friends" style="color: #0C0C0C"><span class="layui-card-font-span" style="color: #1fbf94;padding-left: 10px" id="scale"></span>
+                    </div>
+                    <div class="layui-card-body">
+                        <li class="layui-icon layui-icon-snowflake" style="color: #0C0C0C"><span class="layui-card-font-span" style="color: #1fbf94;padding-left: 10px" id="company_Detailed_place"></span>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <span>Copyright © 2021 「本站仅为 layui 文档保留的镜像站点，与官方无关」 MIT Licensed 免责声明 友链 公众号  公网安备 00000000000000号 ICP备00000000号</span>
+            </div>
+        </div>
+</div>
+<!-- 依 赖 脚 本 -->
+<script src="component/layui/layui.js"></script>
+<script src="component/pear/applicationUtil.js"></script>
+<script src="component/pear/pear.js"></script>
+<script src="view/js/home_jop_own.js"></script>
+<!-- 框 架 初 始 化 -->
+<script>
+    layui.use(['toast','admin', 'jquery', 'popup', 'dropdown', 'util', 'carousel', 'card', 'restClient', 'form'], function () {
+        var $ = layui.jquery;
+        var admin = layui.admin;
+        var popup = layui.popup;
+        var dropdown = layui.dropdown;
+        var util = layui.util;
+        var carousel = layui.carousel;
+        var card = layui.card;
+        var restClient = layui.restClient;
+        var form = layui.form;
+        var toast = layui.toast;
+        var positionId = JSON.parse(decodeURIComponent(getPathParam("id")));
+        console.log(positionId)
+        admin.setConfigPath('config/pear.config.yml')
+        admin.setMenuPath(applicationUtil.URL + "/api/sys/user/menu");
+        admin.render();
+
+        var area = layui.restClient.getSync("admin/data/area.json")
+        var res = layui.restClient.getSync(applicationUtil.URL + '/api/sys/position/noAuth/position?id='+positionId)
+        console.log(res.data)
+        if (res.code === 200){
+            console.log(res.date)
+            $("#title").html(res.data.title);
+            $("#salary").html(res.data.low_salary+'k-'+res.data.high_salary+'k');
+            $("#require").html(res.data.education_require+'/经验年限 '+res.data.work_years+'年/'+'工作时长 '+res.data.work_hours+'小时');
+            $("#company_name").html(res.data.company_name);
+            $("#data_time").html(res.data.data_time);
+            $("#treatment").html(res.data.treatment);
+            $("#requirement").html(res.data.requirement);
+            $("#provinceCityCounty").html(
+                area["province_list"][res.data.province_code]+' '
+                +area["city_list"][res.data.city_code]+' '
+                +area["county_list"][res.data.county_code]);
+            $("#detailed_place").html(res.data.detailed_place);
+            $("#company_nameTwo").html(res.data.company_name);
+            $("#scale").html(res.data.scale);
+            $("#company_Detailed_place").html(res.data.company_detailed_place);
+        }
+        form.on('submit(submit-resume)', function () {
+            let loading = layer.load();
+            restClient.put(applicationUtil.URL + '/api/sys/resume-position/submitResume', JSON.stringify({positionId: positionId}), (res) => {
+                console.log(res)
+
+                layer.close(loading);
+                if (res.success) {
+                    toast.success({
+                        title: 'Caution',
+                        message: '投递成功！',
+                        position: 'topCenter'
+                    });
+                } else if (res.code===500){
+                    toast.error({
+                        title: 'Caution',
+                        message: res.msg,
+                        position: 'topCenter'
+                    });
+                }else {
+                    toast.warning({
+                        title: 'Caution',
+                        message: '认证后才可以投递呦！',
+                        position: 'topCenter'
+                    });
+                    let loading = layer.load();
+                    setTimeout(function () {
+                        layer.close(loading);
+                        location.href = "login.html";
+                    }, 1500);
+                }
+            });
+            return false;
+        });
+        // 登出逻辑
+        admin.logout(function () {
+            localStorage.removeItem('token');
+            localStorage.removeItem('tokenKey');
+            popup.success("注销成功", function () {
+                location.href = "login.html";
+            })
+            return true;
+        })
+        // 初始化消息回调
+        admin.message();
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pearadmin.pro.modules.sys.repository.SysDataSourceRepository">
+
+    <select id="selectDataSource" resultType="SysDataSource">
+        select * from sys_data_source sds
+        <where>
+            <if test="request.name !=null and request.name !=''">
+                and sds.name like concat('%', #{request.name}, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

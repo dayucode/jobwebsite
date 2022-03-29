@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title> DaYu Admin Layui </title>
+    <!-- 依 赖 样 式 -->
+    <link rel="stylesheet" href="component/pear/css/pear.css"/>
+    <!-- 加 载 样 式 -->
+    <link rel="stylesheet" href="admin/css/loader.css"/>
+    <link rel="stylesheet" href="admin/css/jop.css"/>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout">
+    <div class="top">
+        <div class="header">
+            <ul class="layui-nav header-left" lay-bar="disabled">
+                <li class="layui-nav-item">
+                    <a class="layui-icon layui-icon-login-wechat" href="javascript:;" style="font-size: 25px"></a>
+                </li>
+                <li class="layui-nav-item"><a href="home.html">首页</a></li>
+                <li class="layui-nav-item"><a href="position.html">职位</a></li>
+            </ul>
+            <ul class="layui-nav header-right" lay-bar="disabled">
+                <li class="layui-nav-item layui-hide-xs message"></li>
+                <li class="layui-nav-item">
+                    <a class="layui-icon layui-icon-username" href="javascript:;"></a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" onclick="enterPerson()" >基本资料</a></dd>
+                        <dd><a href="javascript:;" onclick="enterAdmin()">注销登录</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+        <div class="middle-search">
+            <div class="search-form">
+                <form class="layui-form" action="" lay-filter="search-form">
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <input type="text" name="title" placeholder="职位" class="layui-input">
+                        </div>
+                        <div class="layui-input-inline">
+                            <input type="text" name="companyName" placeholder="公司" class="layui-input">
+                        </div>
+                        <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="search-btn">
+                            <i class="layui-icon layui-icon-search"></i>
+                            查询
+                        </button>
+                        <button id="resetId" type="reset" class="pear-btn pear-btn-md">
+                            <i class="layui-icon layui-icon-refresh"></i>
+                            重置
+                        </button>
+                    </div>
+                    <div class="layui-inline order-by">
+                        <div class="layui-input-inline">
+                            <select name="orderByType" lay-search="">
+                                <option value="">最新</option>
+                                <option value="2">最热</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="salaryRange">
+                                <option value="">不限薪资</option>
+                                <option value="1">2k以下</option>
+                                <option value="2">2k-5k</option>
+                                <option value="3">5k-10k</option>
+                                <option value="4">10k-15k</option>
+                                <option value="5">15k-25k</option>
+                                <option value="6">25k-50k</option>
+                                <option value="7">50k以上</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="categoryCode" lay-search="">
+                                <option value="">不限行业</option>
+                                <option value="1001000">计算机软件/硬件/信息服务</option>
+                                <option value="1001001">互联网和相关服务</option>
+                                <option value="1001002">IT服务-其他</option>
+                                <option value="1002000">机械/电子</option>
+                                <option value="1003000">服装/纺织</option>
+                                <option value="1002002">制造业-其他</option>
+                                <option value="1003008">批发</option>
+                                <option value="1003010">零售</option>
+                                <option value="1003001">批发/零售-其他</option>
+                                <option value="1009000">医院/医疗机构</option>
+                                <option value="1009003">医疗器械</option>
+                                <option value="1009004">医疗-其他</option>
+                                <option value="1004001">餐饮</option>
+                                <option value="1004004">居民服务</option>
+                                <option value="1004002">生活服务-其他</option>
+                                <option value="1005001">文化/体育</option>
+                                <option value="1005002">娱乐/旅游</option>
+                                <option value="1005000">文化/体育/娱乐业-其他</option>
+                                <option value="1006001">建筑业</option>
+                                <option value="1006002">建材装修</option>
+                                <option value="1006003">建筑/房地产-其他</option>
+                                <option value="1007000">学前教育</option>
+                                <option value="1007001">初中等教育</option>
+                                <option value="1007002">高等教育</option>
+                                <option value="1008003">物流/仓储</option>
+                                <option value="1008000">道路/铁路运</option>
+                                <option value="1008006">运输/物流/仓储-其他</option>
+                            </select>
+                        </div>
+                        <div id="area-picker">
+                            <div class="layui-input-inline" >
+                                <select name="provinceCode" class="province-selector">
+                                    <option value="">请选择省</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="cityCode" class="city-selector">
+                                    <option value="">请选择市</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="countyCode" class="county-selector">
+                                    <option value="">请选择区</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="car-table" id="currentTableId"></div>
+    <div class="footer">
+        <span>Copyright © 2021 「本站仅为 layui 文档保留的镜像站点，与官方无关」 MIT Licensed 免责声明 友链 公众号  公网安备 00000000000000号 ICP备00000000号</span>
+    </div>
+</div>
+<!-- 依 赖 脚 本 -->
+<script src="component/layui/layui.js"></script>
+<script src="component/pear/applicationUtil.js"></script>
+<script src="component/pear/pear.js"></script>
+<script src="view/js/home_jop_own.js"></script>
+<!-- 框 架 初 始 化 -->
+<script>
+    layui.use([ 'admin','form','jquery', 'popup', 'carousel', 'card','area', 'element', 'code'], function () {
+        var $ = layui.jquery;
+        var popup = layui.popup;
+        var dropdown = layui.dropdown;
+        var carousel = layui.carousel;
+        var card = layui.card;
+        var form = layui.form;
+        var admin = layui.admin;
+        var area = layui.area;
+        area.render({
+            elem: '#area-picker',
+            change: function(res) {
+                //选择结果
+                console.log(res);
+            }
+        });
+        //菜单点击事件
+        dropdown.on('click(docDemoMenu1)', function (options) {
+            var thisElem = $(this);
+            console.log(options.id);
+        });
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            , width: '750px'
+            , height: '350px'
+            , interval: 5000
+        });
+        card.render({
+            elem: '#currentTableId',
+            url: applicationUtil.URL+'/api/sys/position/noAuth/allPosition',
+            data: [], // 静态数据
+            page: true, // 是否分页
+            limit: 8, // 每页数量
+            linenum: 4, // 每行数量
+            clickItem: function(data){ // 单击事件
+                console.log(data)
+            }
+        })
+        form.on('submit(search-btn)', function (data) {
+            card.reload("currentTableId", {
+                where: data.field,
+            });
+            return false;
+        });
+        // 登出逻辑
+        admin.logout(function () {
+            localStorage.removeItem('token');
+            localStorage.removeItem('tokenKey');
+            popup.success("注销成功",function(){
+                location.href = "login.html";
+            })
+            popup.success("注销成功", function () {
+                location.href = "login.html";
+            })
+            return true;
+        })
+        // 初始化消息回调
+        admin.message();
+    })
+</script>
+</body>
+</html>

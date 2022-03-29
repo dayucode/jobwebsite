@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pearadmin.pro.modules.not.repository.SysInboxRepository">
+
+    <!-- 私 信 列 表 -->
+    <select id="selectInbox" resultType="SysInbox">
+        select
+        si.*,
+        su1.nickname as recipientName,
+        su2.nickname as createName
+        from sys_inbox si
+        left join sys_user su1 on su1.id = si.recipient_id
+        left join sys_user su2 on su2.id = si.create_by
+    </select>
+
+</mapper>

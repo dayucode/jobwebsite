@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>我的企业</title>
+	<link href="../../../component/pear/css/pear.css" rel="stylesheet" />
+</head>
+<body class="pear-container">
+<div class="layui-card">
+	<div class="layui-card-body">
+		<table id="dataTable" lay-filter="dataTable"></table>
+	</div>
+</div>
+<script type="text/html" id="status">
+	{{#if (d.status == '0') { }}
+	<span>未审核</span>
+	{{# }else if(d.status == '1'){ }}
+	<span>审核通过</span>
+	{{# }else if(d.status == '2'){ }}
+	<span>审核未通过</span>
+	{{# } }}
+</script>
+<script type="text/html" id="table-bar">
+	<button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="view"><i class="layui-icon layui-icon-right"></i></button>
+	<button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
+</script>
+
+<script src="../../../component/layui/layui.js"></script>
+<script src="../../../component/pear/applicationUtil.js"></script>
+<script src="../../../component/pear/pear.js"></script>
+<script>
+	layui.use(['table','form','jquery','restClient'],function () {
+		let table = layui.table;
+		let form = layui.form;
+		let $ = layui.jquery;
+		let restClient = layui.restClient;
+		let cols = [
+			[
+				{title: '公司名称', field: 'companyName', align:'center'},
+				{title: '公司法人', field: 'legal', align:'center'},
+				{title: '联系电话', field: 'phone', align:'center'},
+				{title: '联系邮箱', field: 'email', align:'center'},
+				{title: '审核状态', field: 'status', align:'center',templet: '#status'},
+				{title: '操作', toolbar: '#table-bar', align:'center', width:195}
+			]
+		]
+		table.render({
+			elem: '#dataTable',
+			url: applicationUtil.URL+'/api/sys/company/userCompany',
+			page: false,
+			cols: cols,
+			skin: 'line',
+			toolbar: '#',
+			headers: applicationUtil.authorization,
+			text: {none: '暂无信息'}
+		});
+		table.on('tool(dataTable)', function(obj){
+			if(obj.event === 'remove'){
+				window.remove(obj);
+			} else if(obj.event === 'view'){
+				window.view(obj);
+			}
+		});
+		window.view = function (obj) {
+			layer.open({
+				type: 2,
+				title: '详情',
+				shade: 0.1,
+				area: ['650px', '550px'],
+				content: 'view.html?details=' + encodeURIComponent(JSON.stringify(obj.data))
+			});
+		}
+		window.remove = function(obj){
+			layer.confirm('确定要删除该企业', {icon: 3, title:'提示'}, function(index){
+				layer.close(index);
+				let loading = layer.load();
+				restClient.remove(applicationUtil.URL + '/api/sys/company/remove/?id='+obj.data['id'],null, (res) => {
+					layer.close(loading);
+					if (res.success) {
+						layer.msg(res.msg, {icon: 1, time: 1000});
+						window.refresh();
+					} else {
+						layer.msg(res.msg, {icon: 2, time: 1000});
+					}
+				});
+			});
+		}
+		window.refresh = function(){
+			table.reload('dataTable');
+		}
+	})
+</script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>职位详情</title>
+    <link href="../../../component/pear/css/pear.css" rel="stylesheet" />
+    <style>
+        #area-picker input {
+            width: 150px;
+        }
+
+        .area .layui-form-item .layui-inline {
+            margin-right: 4px !important;
+        }
+
+        #area-picker .layui-select-title {
+            width: 150px;
+        }
+
+        #area-picker2 input {
+            width: 150px;
+        }
+
+        #area-picker2 .layui-select-title {
+            width: 150px;
+        }
+
+        .layui-form-label {
+            width: 85px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+            padding: 9px 15px;
+        }
+
+        .layui-input, .layui-textarea {
+            display: block;
+            width: 470px;
+            padding-left: 10px;
+        }
+
+        .layui-form-select .layui-edge {
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form" lay-filter="form-data">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+                <label class="layui-form-label">所属公司:</label>
+                <div class="layui-inline">
+                    <select id="company_id" name="company_id" lay-verify="require" disabled></select>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">职位名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" lay-verify="require" autocomplete="off" placeholder="请输入标题"
+                               class="layui-input" disabled>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">职位介绍</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入描述" disabled name="introduction" lay-verify="require" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">职位待遇</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入描述" disabled name="treatment" lay-verify="require" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">最高薪资(K)</label>
+                    <div class="layui-input-block">
+                        <input type="number" placeholder="请输入标题" value="" class="layui-input"
+                               lay-verify="number" name="high_salary" lay-verify="require" disabled/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">最低薪资(K)</label>
+                    <div class="layui-input-block">
+                        <input type="number" placeholder="请输入标题" value="" class="layui-input"
+                               lay-verify="number" name="low_salary" lay-verify="require" disabled/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">学历要求</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="education_require" disabled autocomplete="off" placeholder="请输入标题" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">职位要求</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入描述" disabled name="requirement" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">年限要求</label>
+                    <div class="layui-input-block">
+                        <input type="number" disabled placeholder="请输入标题" value="" class="layui-input"  name="work_years"/>
+                    </div>
+                </div>
+                <div class="area">
+                    <div class="layui-form-item">
+                        <div id="area-picker">
+                            <label class="layui-form-label">工作地:</label>
+                            <div class="layui-inline">
+                                <select name="province_code" class="province-selector" lay-verify="required" disabled>
+                                    <option value="">请选择省</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select name="city_code" class="city-selector" lay-verify="required" disabled>
+                                    <option value="">请选择市</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select name="county_code" class="county-selector" lay-verify="required" disabled>
+                                    <option value="">请选择区</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">详细工作地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="detailed_place" disabled lay-verify="required" autocomplete="off" placeholder="请输入标题"
+                               class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="../../../component/layui/layui.js"></script>
+<script src="../../../component/pear/applicationUtil.js"></script>
+<script src="../../../component/pear/pear.js"></script>
+<script>
+    layui.use(['form', 'jquery','restClient','area','toast'], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let restClient = layui.restClient;
+        let area = layui.area;
+        var options = [];
+        options.push('<option value="">请选择标题</option>')
+        var res = restClient.getSync(applicationUtil.URL + '/api/sys/company/userCompany',{ status: "1"})
+        if (res.code === 0){
+            for (const key in res.data) {
+                options.push("<option value='" + res.data[key].id + "'> " + res.data[key].companyName + " </option>");
+            }
+            $("#company_id").append(options.join(''));
+        }
+        area.render({
+            elem: '#area-picker',
+            change: function (res) {
+                //选择结果
+                console.log(res);
+            }
+        });
+        var  data =  JSON.parse(decodeURIComponent(getPathParam("data")));
+        if (data){
+            form.val('form-data', data);
+        }
+    })
+</script>
+</body>
+</html>

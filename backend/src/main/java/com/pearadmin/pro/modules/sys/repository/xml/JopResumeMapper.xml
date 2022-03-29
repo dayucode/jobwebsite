@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pearadmin.pro.modules.sys.repository.JopResumeRepository">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.pearadmin.pro.modules.sys.entity.JopResume">
+        <result column="id" property="id"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="user_id" property="userId"/>
+        <result column="birth" property="birth"/>
+        <result column="addr" property="addr"/>
+        <result column="apply" property="apply"/>
+        <result column="high_salary" property="highSalary"/>
+        <result column="low_salary" property="lowSalary"/>
+        <result column="expect_work_place" property="expectWorkPlace"/>
+        <result column="graduation_time" property="graduationTime"/>
+        <result column="education" property="education"/>
+        <result column="school" property="school"/>
+        <result column="start_work_time" property="startWorkTime"/>
+        <result column="educational_experience" property="educationalExperience"/>
+        <result column="training_experience" property="trainingExperience"/>
+        <result column="work_experience" property="workExperience"/>
+        <result column="name" property="name"/>
+        <result column="portrait" property="portrait"/>
+        <result column="phone" property="phone"/>
+        <result column="sex" property="sex"/>
+        <result column="origin" property="origin"/>
+        <result column="profession" property="profession"/>
+        <result column="email" property="email"/>
+        <result column="skill" property="skill"/>
+        <result column="create_template_time" property="createTemplateTime"/>
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,createTemplateTime,create_time,update_time,user_id, birth, addr, apply, high_salary, low_salary,
+        expect_work_palce, graduation_time, education, school, start_work_time, educational_experience,
+        training_experience, work_experience, skill,name,portrait,phone,sex,origin,profession,email
+    </sql>
+</mapper>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pearadmin.pro.modules.sys.repository.JopPositionRepository">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="JopPosition">
+        <result column="id" property="id"/>
+        <result column="company_id" property="companyId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="user_id" property="userId"/>
+        <result column="title" property="title"/>
+        <result column="introduction" property="introduction"/>
+        <result column="high_salary" property="highSalary"/>
+        <result column="low_salary" property="lowSalary"/>
+        <result column="treatment" property="treatment"/>
+        <result column="requirement" property="requirement"/>
+        <result column="education_require" property="educationRequire"/>
+        <result column="work_hours" property="workHours"/>
+        <result column="work_years" property="workYears"/>
+        <result column="province_code" property="provinceCode"/>
+        <result column="city_code" property="cityCode"/>
+        <result column="county_code" property="countyCode"/>
+        <result column="detailed_place" property="detailedPlace"/>
+        <result column="enable" property="enable"/>
+        <result column="category_code" property="categoryCode"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,category_code,company_id,province_code,city_code,detailed_place,county_code,enable,create_time,update_time,user_id, title, introduction, high_salary, low_salary, treatment, requirement, education_require, work_hours, work_years
+    </sql>
+    <select id="selectJopPosition" resultType="java.util.HashMap">
+        SELECT pc.*,date_format(pc.create_time,'%Y-%m-%d %H:%i:%s') as data_time,IFNULL(jrp.order_count,0) order_count
+        FROM (
+        select p.*,
+        c.company_name,
+        c.business_no,
+        c.legal,
+        c.type,
+        c.capital,
+        c.scale,
+        c.phone,
+        c.email,
+        c.province_code as company_province_code,
+        c.county_code as company_county_code,
+        c.city_code as company_city_code,
+        c.detailed_place as company_detailed_place
+        from jop_position p
+        INNER JOIN jop_company c ON p.user_id = c.user_id
+        <where>
+            1=1
+            <if test="request.userId!=null and request.userId!=''">
+                and   p.user_id like concat('%', #{request.userId}, '%')
+            </if>
+            <if test="request.title!=null and request.title!=''">
+                and p.title like concat('%', #{request.title}, '%')
+            </if>
+            <if test="request.highSalary!=null and request.highSalary!=''">
+                and p.high_salary <![CDATA[<=]]> #{request.highSalary}
+            </if>
+            <if test="request.lowSalary!=null and request.lowSalary!=''">
+                and p.low_salary <![CDATA[>=]]> #{request.lowSalary}
+            </if>
+            <if test="request.provinceCode!=null and request.provinceCode!=''">
+                and p.province_code like concat('%', #{request.provinceCode}, '%')
+            </if>
+            <if test="request.countyCode!=null and request.countyCode!=''">
+                and p.county_code like concat('%', #{request.countyCode}, '%')
+            </if>
+            <if test="request.cityCode!=null and request.cityCode!=''">
+                and p.city_code like concat('%', #{request.cityCode}, '%')
+            </if>
+            <if test="request.categoryCode!=null and request.categoryCode!=''">
+                and p.category_code like concat('%', #{request.categoryCode}, '%')
+            </if>
+            <if test="request.enable!=null and request.enable!=''">
+                and p.enable like concat('%', #{request.enable}, '%')
+            </if>
+            <if test="request.searchWord!=null and request.searchWord!=''">
+                and (p.title like concat('%', #{request.searchWord}, '%') or c.company_name like concat('%', #{request.searchWord}, '%'))
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='1'.toString()">
+                and p.low_salary <![CDATA[<2]]>
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='2'.toString()">
+                and p.high_salary <![CDATA[<=5]]> and p.low_salary <![CDATA[>=2]]>
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='3'.toString()">
+                and p.high_salary <![CDATA[<=10]]> and p.low_salary <![CDATA[>=5]]>
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='4'.toString()">
+                and p.high_salary <![CDATA[<=15]]> and p.low_salary <![CDATA[>=10]]>
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='5'.toString()">
+                and p.high_salary <![CDATA[<=25]]> and p.low_salary <![CDATA[>=15]]>
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='6'.toString()">
+                and p.high_salary <![CDATA[<=50]]> and p.low_salary <![CDATA[>=25]]>
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='7'.toString()">
+                and p.low_salary <![CDATA[>50]]>
+            </if>
+            <if test="request.provinceCode!=null and request.provinceCode!=''">
+                and p.province_code like concat('%', #{request.provinceCode}, '%')
+            </if>
+            <if test="request.cityCode!=null and request.cityCode!=''">
+                and p.province_code like concat('%', #{request.cityCode}, '%')
+            </if>
+            <if test="request.countyCode!=null and request.countyCode!=''">
+                and p.county_code like concat('%', #{request.countyCode}, '%')
+            </if>
+            and p.company_id = c.id
+            and c.status = '1'
+            order by p.create_time desc
+        </where>) pc LEFT JOIN (
+            SELECT position_id,count(*) as order_count FROM  jop_resume_position GROUP BY position_id
+        ) jrp ON pc.id = jrp.position_id
+    </select>
+    <select id="selectJopPositionInfo" resultType="java.util.Map">
+        SELECT pc.*,date_format(pc.create_time,'%Y-%m-%d %H:%i:%s') as data_time,IFNULL(0,jrp.order_count) order_count
+        FROM (
+        select p.*,
+        c.company_name,
+        c.business_no,
+        c.legal,
+        c.type,
+        c.capital,
+        c.scale,
+        c.phone,
+        c.email,
+        c.province_code as company_province_code,
+        c.county_code as company_county_code,
+        c.city_code as company_city_code,
+        c.detailed_place as company_detailed_place
+        from jop_position p
+        INNER JOIN jop_company c ON p.user_id = c.user_id
+        <where>
+            1=1
+            <if test="request.userId!=null and request.userId!=''">
+                and   p.user_id like concat('%', #{request.userId}, '%')
+            </if>
+            <if test="request.title!=null and request.title!=''">
+                and p.title like concat('%', #{request.title}, '%')
+            </if>
+            <if test="request.highSalary!=null and request.highSalary!=''">
+                and p.high_salary <![CDATA[<=]]> #{request.highSalary}
+            </if>
+            <if test="request.lowSalary!=null and request.lowSalary!=''">
+                and p.low_salary <![CDATA[>=]]> #{request.lowSalary}
+            </if>
+            <if test="request.provinceCode!=null and request.provinceCode!=''">
+                and p.province_code like concat('%', #{request.provinceCode}, '%')
+            </if>
+            <if test="request.countyCode!=null and request.countyCode!=''">
+                and p.county_code like concat('%', #{request.countyCode}, '%')
+            </if>
+            <if test="request.cityCode!=null and request.cityCode!=''">
+                and p.city_code like concat('%', #{request.cityCode}, '%')
+            </if>
+            <if test="request.categoryCode!=null and request.categoryCode!=''">
+                and p.category_code like concat('%', #{request.categoryCode}, '%')
+            </if>
+            <if test="request.enable!=null and request.enable!=''">
+                and p.enable like concat('%', #{request.enable}, '%')
+            </if>
+            <if test="request.searchWord!=null and request.searchWord!=''">
+                and (p.title like concat('%', #{request.searchWord}, '%') or c.company_name like concat('%', #{request.searchWord}, '%'))
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='1'.toString()">
+                and p.low_salary <![CDATA[<2]]>
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='2'.toString()">
+                and p.high_salary <![CDATA[<=5]]> and p.low_salary <![CDATA[>=2]]>
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='3'.toString()">
+                and p.high_salary <![CDATA[<=10]]> and p.low_salary <![CDATA[>=5]]>
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='4'.toString()">
+                and p.high_salary <![CDATA[<=15]]> and p.low_salary <![CDATA[>=10]]>
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='5'.toString()">
+                and p.high_salary <![CDATA[<=25]]> and p.low_salary <![CDATA[>=15]]>
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='6'.toString()">
+                and p.high_salary <![CDATA[<=50]]> and p.low_salary <![CDATA[>=25]]>
+            </if>
+            <if test="request.salaryRange!=null and request.salaryRange!='' and request.salaryRange=='7'.toString()">
+                and p.low_salary <![CDATA[>50]]>
+            </if>
+            <if test="request.provinceCode!=null and request.provinceCode!=''">
+                and p.province_code like concat('%', #{request.provinceCode}, '%')
+            </if>
+            <if test="request.cityCode!=null and request.cityCode!=''">
+                and p.province_code like concat('%', #{request.cityCode}, '%')
+            </if>
+            <if test="request.countyCode!=null and request.countyCode!=''">
+                and p.county_code like concat('%', #{request.countyCode}, '%')
+            </if>
+            <if test="request.id!=null and request.id!=''">
+                and p.id like concat('%', #{request.id}, '%')
+            </if>
+            and p.company_id = c.id
+            and c.status = '1'
+            order by p.create_time desc
+        </where>) pc LEFT JOIN (
+        SELECT position_id,count(*) as order_count FROM  jop_resume_position GROUP BY position_id
+        ) jrp ON pc.id = jrp.position_id
+    </select>
+</mapper>

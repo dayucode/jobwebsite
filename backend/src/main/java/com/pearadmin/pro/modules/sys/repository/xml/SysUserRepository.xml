@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pearadmin.pro.modules.sys.repository.SysUserRepository">
+
+    <select id="selectUser" parameterType="SysUserRequest" resultType="SysUser">
+        select *,
+        sd.dept_name as deptName
+        from sys_user su
+        left join sys_dept sd on sd.dept_id = su.dept_id
+        <where>
+            <if test="request.username!=null and request.username!=''">
+                and su.username like concat('%', #{request.username}, '%')
+            </if>
+            <if test="request.nickname!=null and request.nickname!=''">
+                and su.nickname like concat('%', #{request.nickname}, '%')
+            </if>
+            <if test="request.deptIds != null">
+                and sd.dept_id in
+                <foreach item="deptId" collection="request.deptIds" open="(" separator="," close=")">
+                    #{deptId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByUsername" parameterType="string" resultType="SysUser">
+        select * from sys_user
+        where username = #{username} limit 1
+    </select>
+</mapper>
