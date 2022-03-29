@@ -19,21 +19,21 @@
 1. 对请求放行（针对一般资源类似css、js、图片等静态资源及初始访问接口获取验证码/登录/注册等接口）
 2. 对请求拦截，针对前端访问后端业务接口(即CRDU及其他面向系统的业务操作)
 
-![image-20220329102058916](C:\Users\W\AppData\Roaming\Typora\typora-user-images\image-20220329102058916.png)
+![image](https://github.com/dayucode/jobwebsite/blob/master/pic/code1.png)
 
 具体的认证流程为（登录或者注册统一称为登录）
 
 SpringSecurity拦截器：
 
-![image-20220329102254833](C:\Users\W\AppData\Roaming\Typora\typora-user-images\image-20220329102254833.png)
+![image](https://github.com/dayucode/jobwebsite/blob/master/pic/code2.png)
 
 （1）进入登录页面自发请求后端服务器获取验证码，登录请求带上验证码请求后端，后端通过判断验证码是否存在判断是否进入验证码拦截器。进入验证码拦截器后通过用户名及密码验证用户是否存在，若存在生成token(jwt生成由uuid加自定义字符组成)返回给用户并存储到redis数据库。jwt了解（https://www.jianshu.com/p/5fb8918a6b49）
 
-![image-20220329102728739](C:\Users\W\AppData\Roaming\Typora\typora-user-images\image-20220329102728739.png)
+![image](https://github.com/dayucode/jobwebsite/blob/master/pic/code3.png)
 
 （2）用户在访问其他业务接口时带上token，后端请求时通过判断请求是否带token进入登录拦截器，若存在，通过存储在redis数据库的token进行匹配验证token是否合法（是否存在及是否失效）验证成功后放行接口进行业务操作。
 
-![image-20220329102803295](C:\Users\W\AppData\Roaming\Typora\typora-user-images\image-20220329102803295.png)
+![image](https://github.com/dayucode/jobwebsite/blob/master/pic/code4.png)
 
 注意的是每次token验证完后都会为系统注入Authentication（封装用户权限及基本信息）对象，以供开发者在全局随时随地获取当前请求用户信息
 
@@ -73,10 +73,11 @@ Mybatis-plus提供了2个接口1个类：
 
 1、通过调用github上的开源工具包 poi-tl（https://github.com/Sayi/poi-tl）生成docx，具体的流程就是查询简历信息到实体中，将实体set到工具包中，设置生成文档路径。
 
-![image-20220329105655788](C:\Users\W\AppData\Roaming\Typora\typora-user-images\image-20220329105655788.png)
+![image](https://github.com/dayucode/jobwebsite/blob/master/pic/code5.png)
 
 2、找到生成的doxc简历文件，设置生成pdf路径，将docx转化为pdf文件并保存。
 
-![image-20220329105838539](C:\Users\W\AppData\Roaming\Typora\typora-user-images\image-20220329105838539.png)
+![image](https://github.com/dayucode/jobwebsite/blob/master/pic/code6.png)
 
 注意的是：生成的简历命名方式  resume_+'用户的userId'+docx/pdf,用户查看简历也是通过拼接指定路径（pdf生成路径）+自己的id+文件后缀查看简历文件
+
