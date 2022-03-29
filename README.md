@@ -2,9 +2,9 @@
 
 ---
 
-系统整体难点解析可概括为 
+系统整体关键点解析可概括为 
 
-`一、资源权限认证  二、前后端分离   三、数据库及业务操作  四、简历生成`  
+**`一、资源权限认证  二、前后端分离   三、数据库及业务操作  四、简历生成`  **
 
 ---
 
@@ -14,7 +14,7 @@
 
 **面向系统解释**：细分角色和权限，并将用户、角色、权限和资源均采用数据库存储，并且自定义过滤器，代替原有的FilterSecurityInterceptor过滤器
 
-**面向用户解释：**前端发起的任意请求访问后端受到SpringSecurity安全框架的制约，每一个请求都被该框架拦截，拦截后操作有两种
+**面向用户解释**：前端发起的任意请求访问后端受到SpringSecurity安全框架的制约，每一个请求都被该框架拦截，拦截后操作有两种
 
 1. 对请求放行（针对一般资源类似css、js、图片等静态资源及初始访问接口获取验证码/登录/注册等接口）
 2. 对请求拦截，针对前端访问后端业务接口(即CRDU及其他面向系统的业务操作)
@@ -71,7 +71,7 @@ Mybatis-plus提供了2个接口1个类：
 
 前端填写简历信息-->点击生成简历-->后端查找简历信息+简历模板-->生成docx文件-->转化成pdf文件-->点击预览-->查看后端生成的pdf简历
 
-1、通过调用github上的开源工具包 poi-tl（https://github.com/Sayi/poi-tl）生成docx，具体的流程就是查询简历信息到实体中，将实体set到工具包中，设置生成文档路径。
+1、通过调用开源工具包生成docx，具体的流程就是查询简历信息到实体中，将实体set到工具包中，设置生成文档路径。
 
 ![image](https://github.com/dayucode/jobwebsite/blob/master/pic/code5.png)
 
@@ -81,3 +81,48 @@ Mybatis-plus提供了2个接口1个类：
 
 注意的是：生成的简历命名方式  resume_+'用户的userId'+docx/pdf,用户查看简历也是通过拼接指定路径（pdf生成路径）+自己的id+文件后缀查看简历文件
 
+---
+
+<h2>部分页面预览</h2>
+
+---
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/1.png" alt="1" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/2.png" alt="2" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/3.png" alt="3" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/4.png" alt="4" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/5.png" alt="5" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/6.png" alt="6" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/7.png" alt="7" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/8.png" alt="8" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/9.png" alt="9" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/10.png" alt="10" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/11.png" alt="11" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/12.png" alt="12" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/13.png" alt="13" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/14.png" alt="14" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/15.png" alt="15" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/16.png" alt="16" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/17.png" alt="17" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/18.png" alt="18" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/19.png" alt="19" style="zoom:40%;" />
+
+<img src="https://github.com/dayucode/jobwebsite/blob/master/pic/20.png" alt="20" style="zoom:40%;" />

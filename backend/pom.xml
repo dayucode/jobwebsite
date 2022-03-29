@@ -203,26 +203,6 @@
             <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
             <version>${aliyun.sms.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.deepoove</groupId>
-            <artifactId>poi-tl</artifactId>
-            <version>1.11.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>5.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.documents4j</groupId>
-            <artifactId>documents4j-local</artifactId>
-            <version>1.0.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.documents4j</groupId>
-            <artifactId>documents4j-transformer-msoffice-word</artifactId>
-            <version>1.0.3</version>
-        </dependency>
     </dependencies>
 
     <!-- 构 建 配 置 -->

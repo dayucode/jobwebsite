@@ -4,8 +4,6 @@
 PEAR-ADMIN-PRO\BACKEND
 │  pom.xml————————maven  pom.xml配置文件
 │  
-├─sql
-│      pear-admin-pro.sql————————数据库文件
 │      
 └─src
     └─main
