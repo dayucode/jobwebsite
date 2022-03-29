@@ -1,10 +1,16 @@
+**招聘网站仿拉钩网、Boss直聘求职网站。主要功能有求职功能、填写简历后可根据不同的模板动态生成不同风格的简历。招聘功能企业认证后待管理员审核通过后发布招聘。求职者和招聘者可以及时沟通。**
+
+模板1动态生成简历样式：https://github.com/dayucode/jobwebsite/blob/master/pic/resume.pdf
+
+本系统可改购物网站/商城、官方网站等。后台管理，页面漂亮大方
+
 <h2>招聘网代码解析</h2>
 
 ---
 
 系统整体关键点解析可概括为 
 
-**`一、资源权限认证  二、前后端分离   三、数据库及业务操作  四、简历生成`  **
+**一、资源权限认证  二、前后端分离   三、数据库及业务操作  四、简历生成**
 
 ---
 
@@ -126,3 +132,12 @@ Mybatis-plus提供了2个接口1个类：
 <img src="https://github.com/dayucode/jobwebsite/blob/master/pic/19.png" alt="19" style="zoom:40%;" />
 
 <img src="https://github.com/dayucode/jobwebsite/blob/master/pic/20.png" alt="20" style="zoom:40%;" />
+
+---
+
+如有疑问可咨询邮箱：dayucode@foxmail.com
+
+微信：
+
+<img src="https://github.com/dayucode/jkapp/blob/master/pic/wexin.jpg" alt="20" style="zoom:60%;" />
+
