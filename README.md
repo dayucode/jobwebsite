@@ -139,5 +139,5 @@ Mybatis-plus提供了2个接口1个类：
 
 微信：
 
-<img src="https://github.com/dayucode/jkapp/blob/master/pic/wexin.jpg" alt="20" style="zoom:60%;" />
+<img src="https://github.com/dayucode/jkapp/blob/master/pic/wexin.jpg" alt="20" style="zoom:40%;" />
 
